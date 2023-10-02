@@ -1,0 +1,46 @@
+{% extends 'layout/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Удаление поста
+{% endblock title %} 
+
+{% block content %} 
+<section class="tables">
+    <div class="page-header">
+        <div class=row><h1 class="page-title">Действительно удалить?</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-md-center>">
+           <div class="col">
+                <h1 class="page-title">{{ post.postTitle|censor }}</h1>   
+           </div>
+           <div class="col-md-auto">
+                <h3 class="small test-muted">{{ post.postDateTime }}</h3> 
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col">
+                <h3 class="small text-muted">{{ post.postAuthor.userModel.username }}</h3>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="text-muted">{{ post.postBody|censor }}</p>
+            </div> 
+        </div>
+    </div>
+
+    <div class=row>
+        <form method="POST">
+            {% csrf_token %}
+            <p class="text-muted">
+                <input class="btn btn-primary btn-success" type="submit" value="Удалить">
+            </p>
+        </form>
+    </div> 
+
+</section>
+{% endblock content %}  

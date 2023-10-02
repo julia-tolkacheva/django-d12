@@ -1,0 +1,25 @@
+{% extends 'layout/default.html' %}
+
+{% block title %}
+Создание нового поста
+{% endblock title %} 
+
+{% block content %} 
+<section class="tables">
+    <div class="page-header">
+        <div class=row><h1 class="page-title">Создание нового поста</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+    </div>
+    <div class=row>
+        <form method="POST">
+            {% csrf_token %}
+            <p class="text-muted">
+                {{ form }}
+                <br>
+                <input class="btn btn-primary" type="submit" value="Запостить">
+            </p>
+        </form>
+    </div> 
+
+</section>
+{% endblock content %}  

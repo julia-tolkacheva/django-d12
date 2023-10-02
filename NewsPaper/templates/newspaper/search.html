@@ -1,0 +1,66 @@
+{% extends 'layout/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Список новостей
+{% endblock title %} 
+
+{% block content %} 
+<section class="tables">
+    <div class="page-header">
+        <div class=row><h1 class="page-title">Все новости</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+    </div>
+    <div class=row>
+        <form method="GET">
+            <p class="text-muted">
+                {{ filter.form }}
+                <input class="btn btn-primary" type="submit" value="Искать">
+            </p>
+        </form>
+    </div> 
+
+    <div class="table-responsive">
+        {% if news %}
+            <table class="table b-table table-striped table-hover">
+                <thead >
+                    <th scope="col">
+                        Заголовок
+                    </th>
+                    <th scope="col">
+                        Дата
+                    </th>
+                    <th scope="col">
+                        Текст(50 символов)
+                    </th>
+                    <th scope="col">
+                        Рейтинг
+                    </th>
+                </thead>
+                <tbody>
+                {% for post in filter.qs %}
+                    <tr>
+                        <td>
+                            <a href="{{ post.id }}">{{ post.postTitle|truncatewords:5|censor }}</a>
+                        </td>
+                        <td>
+                            {{ post.postDateTime|date:'M d Y' }}
+                        </td>
+                        <td>
+                            {{ post.postBody|truncatechars:50|censor }}
+                        </td>
+                        <td>
+                            {{ post.postRate }}
+                        </td>
+                    </tr>
+                {% endfor %}        
+            </table>
+
+        {% else %}
+            <h2> Новостей нет </h2>
+        {% endif %}
+    </div>
+
+
+</section>
+{% endblock content %}  

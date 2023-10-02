@@ -1,0 +1,65 @@
+{% extends 'layout/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Список новостей
+{% endblock title %} 
+
+{% block content %} 
+<section class="tables">
+    <div class="page-header">
+        <div class=row><h1 class="page-title">Все новости</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+    </div>
+    <div class="table-responsive">
+        {% if news %}
+            <table class="table b-table table-striped table-hover">
+                <thead >
+                    <th scope="col">
+                        Заголовок
+                    </th>
+                    <th scope="col">
+                        Дата
+                    </th>            
+                    <th scope="col">
+                        Текст(50 символов)
+                    </th>
+                    <th scope="col">
+                        Рейтинг
+                    </th>
+                    <th scope="col">
+                        Действия
+                    </th>
+                </thead>
+                <tbody>
+                {% for post in news %}
+                    <tr>
+                        <td>
+                            <a href="{{ post.id }}">{{ post.postTitle|truncatewords:5|censor }}</a>
+                        </td>
+                        <td>
+                            {{ post.postDateTime|date:'M d Y' }}
+                        </td>
+                        <td>
+                            {{ post.postBody|truncatechars:50|censor }}
+                        </td>
+                        <td>
+                            {{ post.postRate }}
+                        </td>
+                        <td>
+                            <a href="update/{{ post.id }}"> Изменить </a> / 
+                            <a href="delete/{{ post.id }}"> Удалить </a>
+                        </td>
+
+                    </tr>
+                {% endfor %}        
+            </table>
+
+            {% include 'layout/parts/paginator.html' %}
+
+        {% else %}
+            <h2> Новостей нет </h2>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}  
