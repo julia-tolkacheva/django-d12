@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^bsu_2(+y4v7s!hcd&-l=je$#2bha#s2d9%-xrvvv9+p6%=h0%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # Application definition
@@ -42,6 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     
+    #all-auth app:
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    #google-auth provider:
+    'allauth.socialaccount.providers.google',
+
+    #my custom apps:
     'news',
     'accounts',
     'django_filters',
@@ -59,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -78,6 +87,28 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    #Needed to login by username in Django admin regardless of 'allauth'
+    'django.contrib.auth.backends.ModelBackend',
+
+    # 'allauth' specific authentication methods (like login by e-mail etc.)
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+#allauth settings:
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_FORMS = {'signup':'news.forms.BasicSignupForm'}
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 

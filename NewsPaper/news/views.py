@@ -3,13 +3,19 @@
 from typing import Any, Dict
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from .models import Post
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .filters import NewsFilter
 from .forms import NewsForm # импортируем нашу форму
 from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse_lazy
+
+# LoginRequiedMixin - для авторизованного доступа к странице
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.views.generic.base import View
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
@@ -29,6 +35,7 @@ class NewsList(ListView):
                                        queryset=self.get_queryset())
         context['choices'] = Post.postChoice
         context['form'] = NewsForm()
+        context['is_author'] = self.request.user.groups.filter(name='Authors').exists()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -50,6 +57,7 @@ class NewsSearch(ListView):
         context['empty'] = None
         context['filter'] = NewsFilter(self.request.GET,
                                        queryset=self.get_queryset())
+        context['is_author'] = self.request.user.groups.filter(name='Authors').exists()
 
         return context
 
@@ -60,11 +68,14 @@ class NewsDetail(DetailView):
     template_name = 'newspaper/post.html'
     context_object_name = 'post'
 
-class PostCreateView(CreateView):
+class PostCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     template_name = 'newspaper/create_post.html'
     form_class = NewsForm
 
-class PostUpdateView(UpdateView):
+#класс представления для изменения поста
+class PostUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     template_name = 'newspaper/create_post.html'
     form_class = NewsForm
 
@@ -72,9 +83,20 @@ class PostUpdateView(UpdateView):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
 
-class PostDeleteView(DeleteView):
+#класс представления для удаления поста
+class PostDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     template_name = 'newspaper/delete_post.html'
     queryset = Post.objects.all()
     success_url = '../../news/'#reverse_lazy('newspaper:news')
 
+#функциональное представление для включения пользователя в группу Авторы
+@login_required
+#только для авторизованных пользователей
+def upgrade_acc(request):
+    user = request.user
+    author_group = Group.objects.get(name='Authors')
+    if not request.user.groups.filter(name='Authors').exists():
+        author_group.user_set.add(user)
+    return redirect('/')
 

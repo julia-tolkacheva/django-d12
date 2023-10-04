@@ -16,8 +16,8 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="/main/"><img src="{% static 'assets/images/logo.svg' %}" alt="logo" /></a>
-          <a class="sidebar-brand brand-logo-mini" href="/main/"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo" href="/"><img src="{% static 'assets/images/logo.svg' %}" alt="logo" /></a>
+          
         </div>
         
         <ul class="nav">
@@ -40,6 +40,8 @@
               <span class="menu-title">Поиск</span>
             </a>
           </li>
+
+          {% if is_author %}
           <li class="nav-item menu-items">
             <a class="nav-link" href="/news/create">
               <span class="menu-icon">
@@ -48,14 +50,45 @@
               <span class="menu-title">Запостить</span>
             </a>
           </li>
+          {% else %}
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="upgrade">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Хочу стать автором!</span>
+            </a>
+          </li>
+          {% endif %}
+
         </ul>
       </nav>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
 
+
         <!-- Page content -->
         <div class="main-panel">
-          <div class="content-wrapper">
+          <div class="content-wrapper ">
+
+            <div class="row justify-content-center">
+              {% if request.user.is_authenticated %}
+              <h3 class="page-title small text-muted">
+                * Пользователь: 
+                <strong>{{ request.user.username }}</strong>.
+                {% if is_author %}
+                 * Группа: Авторы * 
+                {% endif %}
+
+                <a href="/accounts/logout/"> Выйти</a> 
+              </h3>
+              {% else %}
+              <h3 class="page-title small text-muted">
+                Войдите в аккаунт: 
+                <a href="/accounts/login/"> Войти</a> 
+              </h3>
+              {% endif %}
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     {% block content %}
