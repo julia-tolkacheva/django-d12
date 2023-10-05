@@ -2,11 +2,12 @@
 
 from typing import Any, Dict
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from .models import Post
+from django.views.generic.edit import FormView
+from .models import Post, Category
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .filters import NewsFilter
-from .forms import NewsForm # импортируем нашу форму
+from .forms import NewsForm, SubscribeForm
 from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse_lazy
@@ -89,6 +90,18 @@ class PostDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'newspaper/delete_post.html'
     queryset = Post.objects.all()
     success_url = '../../news/'#reverse_lazy('newspaper:news')
+
+#класс представления для изменения поста
+class SubscribeView(LoginRequiredMixin, FormView):
+    template_name = 'newspaper/subscribe.html'
+    form_class = SubscribeForm
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context =  super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(pk=self.kwargs.get('pk'))
+        email = self.request.user.email
+        context['email'] = email
+        return context
 
 #функциональное представление для включения пользователя в группу Авторы
 @login_required

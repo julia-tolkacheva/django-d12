@@ -11,6 +11,13 @@ class BasicSignupForm(SignupForm):
     basic_group.user_set.add(user)
     return user
 
+class SubscribeForm(forms.Form):
+    email = forms.EmailField()
+
+    def send_email(self):
+        # send email using the self.cleaned_data dictionary
+        pass
+
 
 class NewsForm (ModelForm):
     class Meta:

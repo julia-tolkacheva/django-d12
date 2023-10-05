@@ -16,6 +16,9 @@
             <table class="table b-table table-striped table-hover">
                 <thead >
                     <th scope="col">
+                        Категория
+                    </th>  
+                    <th scope="col">
                         Заголовок
                     </th>
                     <th scope="col">
@@ -34,6 +37,11 @@
                 <tbody>
                 {% for post in news %}
                     <tr>
+                        <td>
+                            {% for cat in post.postCat.all %}
+                            <li><a href="subscribe/{{ cat.id }}">{{ cat }}</a></li>
+                            {% endfor %}  
+                        </td>
                         <td>
                             <a href="{{ post.id }}">{{ post.postTitle|truncatewords:5|censor }}</a>
                         </td>
