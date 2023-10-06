@@ -3,7 +3,7 @@
 from typing import Any, Dict
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.generic.edit import FormView
-from .models import Post, Category
+from .models import Post, Category, Author, Subscribers
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .filters import NewsFilter
@@ -89,18 +89,33 @@ class PostDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ('news.delete_post',)
     template_name = 'newspaper/delete_post.html'
     queryset = Post.objects.all()
-    success_url = '../../news/'#reverse_lazy('newspaper:news')
+    success_url = '/news/'#reverse_lazy('newspaper:news')
 
-#класс представления для изменения поста
+#класс представления для подписки на тему
 class SubscribeView(LoginRequiredMixin, FormView):
     template_name = 'newspaper/subscribe.html'
     form_class = SubscribeForm
-    
+    success_url = '/'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            print ("post! ->"+ request.POST['email'])
+            cat = Category.objects.get(pk=self.kwargs.get('pk'))
+            user = self.request.user
+            Subscribers.objects.create(category=cat, subscriber=user)
+            form.send_email()
+        return super().get(request, *args, **kwargs)
+        
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context =  super().get_context_data(**kwargs)
-        context['category'] = Category.objects.get(pk=self.kwargs.get('pk'))
-        email = self.request.user.email
-        context['email'] = email
+        cat = Category.objects.get(pk=self.kwargs.get('pk'))
+        user = self.request.user
+        context['category'] = cat
+        context['email'] = self.request.user.email
+        context['is_user_already_subscribed'] = Subscribers.objects.all().filter(category=cat, subscriber=user).exists()
+        context['is_author'] = self.request.user.groups.filter(name='Authors').exists()
+        
         return context
 
 #функциональное представление для включения пользователя в группу Авторы
@@ -108,8 +123,11 @@ class SubscribeView(LoginRequiredMixin, FormView):
 #только для авторизованных пользователей
 def upgrade_acc(request):
     user = request.user
+
     author_group = Group.objects.get(name='Authors')
     if not request.user.groups.filter(name='Authors').exists():
         author_group.user_set.add(user)
+        Author.objects.create(userModel=user)
+
     return redirect('/')
 

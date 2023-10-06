@@ -7,22 +7,32 @@
 
 {% block content %} 
 <section class="tables">
+    {% if is_user_already_subscribed %}
     <div class="page-header">
-        <div class=row><h1 class="page-title">Вы хотите подписаться на тему {{ category }}?</h1></div>   
+        <div class=row><h1 class="page-title">Вы уже подписаны на обновления темы: {{ category }}</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+    </div>
+
+    {% else %}
+
+    <div class="page-header">
+        <div class=row><h1 class="page-title">Вы хотите подписаться на обновления темы: {{ category }}?</h1></div>   
         <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
     </div>
 
 
     <div class=row>
-        <div class=row><h2 class="page-title">Ваш email для подписки: {{ email }}</h2></div>   
         <form method="POST">
             {% csrf_token %}
-            <p class="text-muted">
-                {{ form }}
-                <input class="btn btn-primary btn-success" type="submit" value="Хочу">
-            </p>
+
+            {{ form }}
+
+            <input class="btn btn-primary btn-success" type="submit" value="Хочу">
+
+
         </form>
     </div> 
-
+    {% endif %}
+    <a class="btn-secondary" href="/news">Не хочу</a>
 </section>
 {% endblock content %}  

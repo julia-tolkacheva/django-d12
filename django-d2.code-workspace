@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../django-d2-2/django-d2"
+		},
+		{
+			"name": "Django-d6",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

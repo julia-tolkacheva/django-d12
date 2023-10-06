@@ -12,10 +12,11 @@ class BasicSignupForm(SignupForm):
     return user
 
 class SubscribeForm(forms.Form):
-    email = forms.EmailField()
+    email = forms.EmailField(initial="example@mail.ru")
 
     def send_email(self):
         # send email using the self.cleaned_data dictionary
+        print ("send email!")
         pass
 
 
