@@ -9,7 +9,7 @@
 <section class="tables">
     {% if is_user_already_subscribed %}
     <div class="page-header">
-        <div class=row><h1 class="page-title">Вы уже подписаны на обновления темы: {{ category }}</h1></div>   
+        <div class=row><h1 class="page-title">Вы подписаны на обновления темы: {{ category }}</h1></div>   
         <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
     </div>
 
@@ -27,12 +27,14 @@
 
             {{ form }}
 
-            <input class="btn btn-primary btn-success" type="submit" value="Хочу">
-
+            <button class="btn btn-primary btn-success" type="submit">Хочу</button>
 
         </form>
+        <form action="/news/">
+            <button class ="btn btn-danger">Не хочу</button>
+        </form>
+
     </div> 
     {% endif %}
-    <a class="btn-secondary" href="/news">Не хочу</a>
 </section>
 {% endblock content %}  

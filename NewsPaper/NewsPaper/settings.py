@@ -54,6 +54,13 @@ INSTALLED_APPS = [
     'accounts',
     'django_filters',
 ]
+#sending emails:
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'julia.tolkacheva.666'
+EMAIL_HOST_PASSWORD = 'nlidnwazhidnljtk'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
 SITE_ID = 1
 
@@ -101,7 +108,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_FORMS = {'signup':'news.forms.BasicSignupForm'}

@@ -11,6 +11,8 @@ from .forms import NewsForm, SubscribeForm
 from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse_lazy
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 # LoginRequiedMixin - для авторизованного доступа к странице
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -63,7 +65,6 @@ class NewsSearch(ListView):
         return context
 
 
-
 class NewsDetail(DetailView):
     model = Post
     template_name = 'newspaper/post.html'
@@ -91,12 +92,23 @@ class PostDeleteView(PermissionRequiredMixin, DeleteView):
     queryset = Post.objects.all()
     success_url = '/news/'#reverse_lazy('newspaper:news')
 
+
 #класс представления для подписки на тему
 class SubscribeView(LoginRequiredMixin, FormView):
     template_name = 'newspaper/subscribe.html'
     form_class = SubscribeForm
     success_url = '/'
 
+    def subscribe_send_mail(self, cat):
+        user=self.request.user
+        send_mail(
+            subject=f'{user.username}, вы подписаны на обновления\
+                в категории {cat}',
+            message="Поздравляем!",
+            from_email='julia.tolkacheva.666@yandex.ru',
+            recipient_list=[user.email]
+        )
+        
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
@@ -104,7 +116,7 @@ class SubscribeView(LoginRequiredMixin, FormView):
             cat = Category.objects.get(pk=self.kwargs.get('pk'))
             user = self.request.user
             Subscribers.objects.create(category=cat, subscriber=user)
-            form.send_email()
+            self.subscribe_send_mail(cat)
         return super().get(request, *args, **kwargs)
         
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
