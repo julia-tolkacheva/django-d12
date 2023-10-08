@@ -48,9 +48,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     #google-auth provider:
     'allauth.socialaccount.providers.google',
-
+    
+    #scheduler:
+    'django_apscheduler',
     #my custom apps:
-    'news',
+    'news.apps.NewsConfig',
     'accounts',
     'django_filters',
 ]
@@ -62,8 +64,13 @@ EMAIL_HOST_PASSWORD = 'nlidnwazhidnljtk'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
-SITE_ID = 1
+#apscheduler:
 
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -175,3 +182,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+DAY_POSTS_MAX = 3

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Notification</title>
+    </head>
+    <body>
+        {% load account %}
+
+        <h1>Приветствуем, <strong>{{ user.username }}</strong>. 
+            Спасибо за регистрацию на нашем сайте NewsPaper
+            </h1>
+
+        <br>
+        <hr>
+        <h2> Чтобы завершить регистрацию и активировать ваш аккаунт, перейдите по ссылке:</h2>
+        <br>
+        <h2> <a href="{{ activate_url }}"> Активировать аккаунт </a></h2>
+        <br>
+        <hr>
+    </body>
+</html>

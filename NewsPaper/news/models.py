@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+
 # Create your models here.
 class Author(models.Model):
     userModel = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,7 +57,7 @@ class Post(models.Model):
     postRate = models.IntegerField(default = 0)
 
     def __str__(self):
-        return self.postTitle
+        return f'{self.postTitle}-({self.pk})' 
 
     def like(self):
         self.postRate += 1

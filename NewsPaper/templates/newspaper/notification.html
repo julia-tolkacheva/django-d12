@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Notification</title>
+    </head>
+    <body>
+        <h1>Приветствуем, <strong>{{ username }}</strong>. 
+            У нас есть <a href="http://{{ domain }}:8000/{{relative_url}}">новая статья</a>
+            в твоем любимом разделе!</h1>
+        <br>
+        <hr>
+        <h2> {{ post.postTitle }}</h2>
+        <br>
+        <h2> {{ post.postBody|truncatechars:50 }}</h2>
+        <br>
+        <hr>
+    </body>
+</html>

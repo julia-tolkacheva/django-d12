@@ -6,9 +6,12 @@
 
 {% block content %} 
 <section class="tables">
+    {% if not post_limit %}
     <div class="page-header">
-        <div class=row><h1 class="page-title">Создание нового поста</h1></div>   
+
+        <div class=row><h1 class="page-title">Создание нового поста ({{ day_post_counter }})</h1></div>   
         <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+
     </div>
     <div class=row>
         <form method="POST">
@@ -20,6 +23,13 @@
             </p>
         </form>
     </div> 
+    {% else %}
+    <div class="page-header">
 
+        <div class=row><h1 class="page-title">Количество ежедневных постов ({{ day_post_counter }}) достигнуто. Подождите до завтра!</h1></div>   
+        <div class=row><h3 class="page-title small text-muted">{{ time_now|date:'M d Y' }}</h3></div> 
+
+    </div>
+    {% endif %}
 </section>
 {% endblock content %}  

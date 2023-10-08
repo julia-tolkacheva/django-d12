@@ -3,6 +3,7 @@ from .models import Post
 from django import forms
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models  import Group
+from django.contrib.auth.models import User
 
 
 class BasicSignupForm(SignupForm):
@@ -22,6 +23,7 @@ class SubscribeForm(forms.Form):
 
 
 class NewsForm (ModelForm):
+    
     class Meta:
         model = Post
         fields = ['postAuthor', 'postType', 'postCat', 'postTitle', 'postBody']
