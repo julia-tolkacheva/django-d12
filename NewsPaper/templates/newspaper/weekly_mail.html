@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Notification</title>
+    </head>
+    <body>
+        {% load custom_filters %}
+        <h1>Приветствуем, <strong>{{ username }}</strong>.</h1>
+        
+        <br>
+        {% if posts %}
+        <h2> У нас за последнюю неделю есть обновления в твоем любимом разделе {{category_name}}! </h2>
+            <table class="table b-table table-striped table-hover">
+                <thead >
+                    <th scope="col">
+                        Заголовок
+                    </th>
+                    <th scope="col">
+                        Дата
+                    </th>            
+                    <th scope="col">
+                        Текст(50 символов)
+                    </th>
+                    <th scope="col">
+                        Рейтинг
+                    </th>
+                </thead>
+                <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>
+                            <a href="{{ url }}/{{ post.pk }}">{{ post.postTitle|truncatewords:5|censor }}</a>
+                        </td>
+                        <td>
+                            {{ post.postDateTime|date:'M d Y' }}
+                        </td>
+                        <td>
+                            {{ post.postBody|truncatechars:50|censor }}
+                        </td>
+                        <td>
+                            {{ post.postRate }}
+                        </td>
+                    </tr>
+                {% endfor %}        
+            </table>
+
+        {% else %}
+            <h2> Новостей нет </h2>
+        {% endif %}
+    </body>
+</html>
