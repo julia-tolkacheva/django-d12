@@ -67,8 +67,16 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 #apscheduler:
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
-
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+#caches:
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+    }
+}
 
 SITE_ID = 1
 MIDDLEWARE = [
@@ -127,6 +135,8 @@ LOGIN_REDIRECT_URL = '/'
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -183,3 +193,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 DAY_POSTS_MAX = 3
+
+from .log import django_logging_settings
+LOGGING = django_logging_settings
