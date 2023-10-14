@@ -1,42 +1,5 @@
 import logging
 
-def test():
-    logger = logging.getLogger('django')
-    #test DEBUG:
-    logger.debug('This is DEBUG message!')   
-    #test INFO:
-    logger.info('This is INFO message!') 
-    #test WARNING:
-    logger.warning('This is WARNING message!') 
-    #test ERROR:
-    logger.error('This is ERROR message!') 
-    #test CRITICAL:
-    logger.critical('This is CRITICAL message!') 
-
-    l_request = logging.getLogger('django.request')
-    #test DEBUG:
-    l_request.debug('(request)This is DEBUG message!')   
-    #test INFO:
-    l_request.info('(request)This is INFO message!') 
-    #test WARNING:
-    l_request.warning('(request)This is WARNING message!') 
-    #test ERROR:
-    # l_request.error('(request)This is ERROR message!') 
-    #test CRITICAL:
-    # l_request.critical('(request)This is CRITICAL message!') 
-
-    l_security = logging.getLogger('django.security')
-    #test DEBUG:
-    l_security.debug('(security)This is DEBUG message!')   
-    #test INFO:
-    l_security.info('(security)This is INFO message!') 
-    #test WARNING:
-    l_security.warning('(security)This is WARNING message!') 
-    #test ERROR:
-    l_security.error('(security)This is ERROR message!') 
-    #test CRITICAL:
-    l_security.critical('(security)This is CRITICAL message!') 
-
 
 def info_level_filter(record):
     return True if record.levelno <= logging.INFO else False
@@ -69,11 +32,11 @@ django_logging_settings = {
             'style': '{',
         },
         'security': {
-            'format': '{asctime} {levelname} {module} {message}',
+            'format': '{asctime} {levelname} module:*{module}* -> {message}',
             'style': '{',
         },       
         'mail': {
-            'format': '{asctime} {levelname} {message} {pathname}',
+            'format': '{asctime} {levelname}  -> {message} / {pathname}',
             'style': '{',
         },
     },
@@ -138,6 +101,7 @@ django_logging_settings = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'mail',
             'filters': ['require_debug_false'],
         }
     },
@@ -150,27 +114,22 @@ django_logging_settings = {
         'django.request': {
             'handlers': ['file_errors','mail_admins'],
             'level': 'DEBUG',
-            'propagate': True,
         },
         'django.server': {
             'handlers': ['file_errors','mail_admins'],
             'level': 'DEBUG',
-            'propagate': True,
         },
         'django.template': {
             'handlers': ['file_errors'],
             'level': 'DEBUG',
-            'propagate': True,
         },
         'django.db_backends': {
             'handlers': ['file_errors'],
             'level': 'DEBUG',
-            'propagate': True,
         },
         'django.security': {
             'handlers': ['file_security'],
             'level': 'INFO',
-            'propagate': True,
         },                 
     }
 }
