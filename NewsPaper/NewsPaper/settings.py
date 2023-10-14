@@ -63,7 +63,7 @@ EMAIL_HOST_USER = 'julia.tolkacheva.666'
 EMAIL_HOST_PASSWORD = 'nlidnwazhidnljtk'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
-ADMINS=[("Admin","admin@mail.u"),("hosh","hosh@inbox.ru")]
+ADMINS=[("Admin","julia.tolkacheva.666@mail.ru"),]
 SERVER_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
 #apscheduler:
